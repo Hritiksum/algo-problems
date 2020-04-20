@@ -1,5 +1,5 @@
 /*two person meeting schedule and their working hours are given in string formate. To find the time periods more than or equal to 30 min,
-in between both they both can have meeting.*/
+in between they both can have meeting together.*/
 
 //    first person schedule= {{"09:00","10:30"},{"12:00","13:00"},{"16:00","17:00"}}
 //    first person office working hour= {"09:00","20:00"}
