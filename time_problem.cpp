@@ -6,7 +6,6 @@ in between they both can have meeting together.*/
 //    second person schedule= {{"10:00","11:30"},{"12:30","14:30"},{"14:30","15:00"},{"16:00","17:00"}}
 //    second person office working hour= {"10:00","18:30"}
 //    minimum meeting time required=30
-
 //output 11:30-12:00,15:00-16:00,17:00-18:30
 
 #include<bits/stdc++.h>
@@ -41,8 +40,8 @@ public:
         k+=e[4];
         End.mm=stoi(k);
     }
+    shd(){}
 };
-
 
 queue <shd> vtoq(vector <shd> v,int size){
     queue<shd> q;
@@ -68,30 +67,32 @@ bool into(shd s1,shd s2){
     }
 }
 
-shd mg(shd s1,shd s2,vector<shd> &m){
-    shd ma={"00000","00000"};
+shd mg(shd s1,shd s2,vector<shd> &m,int l){
+    shd ma;//={"00000","00000"};
     ma.Start.hh=min(s1.Start.hh,s2.Start.hh);
     ma.Start.mm=min(s1.Start.mm,s2.Start.mm);
     ma.End.hh=max(s1.End.hh,s2.End.hh);
     ma.End.mm=max(s1.End.mm,s2.End.mm);
-    m.push_back(ma);
+    if(l){
+        m[l]=ma;
+    }
+    else{
+        m.push_back(ma);
+    }
 }
-
 
 shd mrg(queue <shd> &s1,queue <shd> &s2,vector <shd> &m){
 //    vector <shd> m;
     while(!s1.empty() && !s2.empty()){
         shd is1=s1.front();
         shd is2=s2.front();
-//        s1.pop();
-//        s2.pop();
         if(into(is1,is2)){
-            m.push_back(mg(is1,is2,m));
+            mg(is1,is2,m,0);//m.push_back(mg(is1,is2,m));
             s1.pop();
             s2.pop();
         }
         else {
-            if(is1.Start.hh>is2.Start.hh){
+            if(is1.Start.hh<is2.Start.hh){
                 m.push_back(is1);
                 s1.pop();
             }
@@ -102,18 +103,36 @@ shd mrg(queue <shd> &s1,queue <shd> &s2,vector <shd> &m){
         }
     }
     while(!s1.empty()){
-        m.push_back(s1.front());
-        s1.pop();
+
+        int l=m.size();
+        shd a=m[l-1];
+        if(into(a,s1.front())){
+            mg(a,s1.front(),m,l-1);
+            s1.pop();
+        }
+        else{
+            m.push_back(s1.front());
+            s1.pop();
+        }
+
     }
     while(!s2.empty()){
-        m.push_back(s2.front());
-        s2.pop();
-    }
+        int l=m.size();
+        shd a=m[l-1];
+        if(into(a,s2.front())){
+            mg(a,s2.front(),m,l-1);
+            s2.pop();
+        }else{
+            m.push_back(s2.front());
+            s2.pop();
+        }
 
+
+    }
 }
 
 void printv(vector <shd> v,int s){
-    for(int i=0;i<s;i++){
+    for(int i=0;i<=s;i++){
         cout<<v[i].Start.hh<<":"<<v[i].Start.mm<<" "<<v[i].End.hh<<":"<<v[i].End.mm<<endl;
     }
 }
@@ -123,6 +142,13 @@ void print(queue <shd> q){
         shd a=q.front();
         cout<<a.Start.hh<<":"<<a.Start.mm<<" "<<a.End.hh<<":"<<a.End.mm<<endl;
         q.pop();
+    }
+}
+
+void mtime(vector<shd> v1, shd p1,shd p2){
+    shd f;
+    if(((p1.Start.hh*100)+p1.Start.mm)>((p2.Start.hh*100)+p2.Start.mm)){
+
     }
 }
 
@@ -146,9 +172,9 @@ int main(){
     //print(q2);
     vector <shd> m;
     mrg(q1,q2,m);
+    //mtime(m,s1d,s2d);
     int s=m.size();
-    printv(m,s);
-
+    //cout<<s<<endl;
+    printv(m,s-1);
     return 0;
-
 }
