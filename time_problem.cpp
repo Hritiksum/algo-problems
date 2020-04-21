@@ -145,12 +145,48 @@ void print(queue <shd> q){
     }
 }
 
-void mtime(vector<shd> v1, shd p1,shd p2){
+void mtime(vector<shd> v, shd p1,shd p2){
     shd f;
     if(((p1.Start.hh*100)+p1.Start.mm)>((p2.Start.hh*100)+p2.Start.mm)){
+        f.Start=p1.Start;
+    }
+    else{
+        f.Start=p2.Start;
+    }
+    if(((p1.End.hh*100)+p1.End.mm)<((p2.End.hh*100)+p2.End.mm)){
+        f.End=p1.End;
+    }
+    else{
+        f.End=p2.End;
+    }
+    //cout<<f.Start.hh<<":"<<f.Start.mm<<"-"<<f.End.hh<<":"<<f.End.mm;
+    int s=v.size();
+    //cout<<s
 
+
+    if(v[0].Start.hh>f.Start.hh){
+        cout<<f.Start.hh<<":"<<f.Start.mm<<"-"<<v[0].Start.hh<<":"<<v[0].Start.mm<<endl;
+    }else if(v[0].Start.hh==f.Start.hh && abs((v[0].Start.mm)-f.Start.mm)>=30){
+        cout<<f.Start.hh<<":"<<f.Start.mm<<"-"<<v[0].Start.hh<<":"<<v[0].Start.mm<<endl;
+    }
+
+    for(int i=0;i<=s-1;i++){
+        if(v[i+1].Start.hh>v[i].End.hh){
+        cout<<v[i].End.hh<<":"<<v[i].End.mm<<"-"<<v[i+1].Start.hh<<":"<<v[i+1].Start.mm<<endl;
+        }
+        else if(v[i+1].Start.hh==v[i].End.hh && abs((v[i+1].Start.mm)-v[i].End.mm)>=30){
+            cout<<v[i].End.hh<<":"<<v[i].End.mm<<"-"<<v[i+1].Start.hh<<":"<<v[i+1].Start.mm<<endl;
+        }
+    }
+
+    if(v[s-1].End.hh<f.End.hh){
+        cout<<v[s-1].End.hh<<":"<<v[s-1].End.mm<<"-"<<f.End.hh<<":"<<f.End.mm<<endl;
+    }
+    else if(v[s-1].End.hh<f.End.hh && abs(v[s-1].End.mm-f.End.mm)>=30){
+        cout<<v[s-1].End.hh<<":"<<v[s-1].End.mm<<"-"<<f.End.hh<<":"<<f.End.mm<<endl;
     }
 }
+
 
 int main(){
 //    first person schedule= {{"09:00","10:30"},{"12:00","13:00"},{"16:00","17:00"}}
@@ -172,9 +208,14 @@ int main(){
     //print(q2);
     vector <shd> m;
     mrg(q1,q2,m);
-    //mtime(m,s1d,s2d);
+
     int s=m.size();
-    //cout<<s<<endl;
+
+    cout<<"merge timetable of both person"<<endl;
     printv(m,s-1);
+
+
+    cout<<"meetting time"<<endl;
+    mtime(m,s1d,s2d);
     return 0;
 }
